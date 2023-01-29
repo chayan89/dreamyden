@@ -38,11 +38,11 @@ class Dashboard extends MY_Controller {
         $weeklytotal     = $weekly_query->result_array();
         $monthly_query   = $this->db->query($monthly_sql);
         $monthlytotal    = $monthly_query->result_array();
-        $this->data['todays_orders']   = $todayorder[0];
-        $this->data['tomorrow_orders'] = $tommoroworder[0];
-        $this->data['weekly_order'] = $weeklyorder[0];
-        $this->data['weeklytotalprice'] = $weeklytotal[0];
-        $this->data['monthlytotal'] = $monthlytotal[0];
+        // $this->data['todays_orders']   = $todayorder[0];
+        // $this->data['tomorrow_orders'] = $tommoroworder[0];
+        // $this->data['weekly_order'] = $weeklyorder[0];
+        // $this->data['weeklytotalprice'] = $weeklytotal[0];
+        // $this->data['monthlytotal'] = $monthlytotal[0];
 
         $this->data['content']    = 'admin/dashboard';        
         $this->load->view('admin/layouts/index', $this->data);

@@ -7,6 +7,7 @@ class Index extends MY_Controller {
 		ini_set('display_errors', 1);
 		parent::__construct();
 		$this->load->model('admin/madmin');
+		$this->obj = new stdClass();
 	}
 	// private function outputJson($response)
 	// {

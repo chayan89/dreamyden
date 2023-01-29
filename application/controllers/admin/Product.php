@@ -9,8 +9,8 @@ class Product extends MY_Controller {
 	public function index()
 	{
 		$this->checkAdminAuth();
-		
 		$this->data['page'] = 'admin/product/index';
+		$this->data['details'] = 'admin/product/index';
 		$this->load_view($this->data);
 	}
 

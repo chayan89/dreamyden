@@ -37,7 +37,9 @@
             <!-- Nested Row within Card Body -->
             <div class="row">
               <div class="col-lg-5 d-none d-lg-block bg-login-image">
-              		<div class="login_shade"><img src="<?=base_url('public/admin/')?>img/login_shade.png" src="login_shade"/></div>
+              		<!-- <div class="login_shade">
+                    <img src="<?=base_url('public/admin/')?>img/login_shade.png" src="login_shade"/>
+                  </div> -->
                     <div class="login_logo">
                       <img src="<?=base_url('public/images/logo.jpg')?>" alt="login_logo" style="width: 100%"/>
                     </div>

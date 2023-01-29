@@ -2,17 +2,24 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class MY_Controller extends CI_Controller {
-	protected $response = [];
+	protected $response = array();
+	protected $data = array();
 	public function __construct() {
 		parent::__construct();
 		$this->load->model('common_model');
 		$this->admin = $this->session->userdata('admin_user');
+		$this->user_details = $this->session->userdata('front_user');
 	}
 	protected function checkAdminAuth() {
 		if (!$this->admin) {
 			redirect('admin', 'refresh');
 		}
 		//return true;
+	}
+	protected function checkAuth() {
+		if (!$this->user_details) {
+			redirect('/', 'refresh');
+		}
 	}
 
 	/**
@@ -27,11 +34,24 @@ class MY_Controller extends CI_Controller {
 		//return true;
 	}
 
+	/**
+	 * Load front application view
+	 */
+	protected function load_front_view($dataArray){
+		$this->data = [];
+		$this->data = $dataArray;
+		$this->data['content']    = $dataArray['page'];
+		//$this->data['details']	  = $dataArray['details'];
+        $this->load->view('front/layout/index', $this->data);
+	}
+	 /**
+	  * Load application admin view
+	  */
 	protected function load_view($dataArray){
 		$this->data = [];
 		$this->data = $dataArray;
 		$this->data['content']    = $dataArray['page'];
-		$this->data['details']	  = $dataArray['details'];
+		//$this->data['details']	  = $dataArray['details'];
         $this->load->view('admin/layouts/index', $this->data);
 	}
 	

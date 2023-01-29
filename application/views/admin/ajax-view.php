@@ -1,4 +1,5 @@
 <?php
+$html = '';
 if (isset($materials)) {
 	if (!empty($materials)) {
 		foreach ($materials as $key => $value) {
@@ -117,28 +118,35 @@ if (isset($products)) {
 	}
 	echo $html;
 } //end Produces
-if (isset($charges)) {
-	if (!empty($charges)) {
-		foreach ($charges as $key => $value) {
+if (isset($cms_data)) {
+	if (!empty($cms_data)) {
+		foreach ($cms_data as $key => $value) {
 			if ($value->status == 0) {
-				$status = '<a href="javascript:void(0)" id="' . $value->id . '" class="change-p-status text-danger" data-status="1" data-table="delivery_charges" data-key-id="id" data-id="' . $value->id . '">Inactive</a>';
+				$status = '<a href="javascript:void(0)" id="' . $value->cms_id . '" class="change-p-status text-danger" data-status="1" data-table="cms" data-key-id="cms_id" data-id="' . $value->cms_id . '">Inactive</a>';
 			} else if ($value->status == 1) {
-				$status = '<a href="javascript:void(0)" id="' . $value->id . '" class="change-p-status text-success" data-status="0" data-table="delivery_charges" data-key-id="id" data-id="' . $value->id . '">Active</a>';
+				$status = '<a href="javascript:void(0)" id="' . $value->cms_id . '" class="change-p-status text-success" data-status="0" data-table="cms" data-key-id="cms_id" data-id="' . $value->cms_id . '">Active</a>';
+			}
+			if(!empty($value->image)){
+				$img = base_url('uploads/cms/'.$value->image);
+			}else{
+				$img = base_url('uploads/no_image.png');
 			}
 			$html .= '<tr>
 						<td>' . ($key+1) . '</td>
-						<td>' . $value->item_quantity . '</td>
-                    	<td>' . round($value->amount, 2) . '</td>
+						<td>' . $value->page . '</td>
+                    	<td>' . $value->title . '</td>
+                    	<td>' . substr($value->description, 0, 100) . '</td>
+                    	<td> <img src="'.$img . '" width="100px"></td>
                     	<td>' . $status . '</td>
 						<td>
-							<a class="edit_class" href="'.base_url("admin/charge/edit/".$value->id).'"><img src="'.base_url("public/admin/").'img/pinkedit.png" alt="pinkedit"/></a>
-                    		<a href="javascript:void(0)" class="btn btn-gray change-p-status" data-fnc="getOperationAreaList" data-status="3" data-f="del" data-table="delivery_charges" data-key-id="id" data-id="' . $value->id . '"><i class="fa fa-trash"></i></a>
+							<a class="edit_class" href="'.base_url("admin/cms/edit/".$value->cms_id).'"><img src="'.base_url("public/admin/").'img/pinkedit.png" alt="pinkedit"/></a>
+                    		<a href="javascript:void(0)" class="btn btn-gray change-p-status" data-status="3" data-f="del" data-table="cms" data-key-id="cms_id" data-id="' . $value->cms_id . '"><i class="fa fa-trash"></i></a>
                     	</td>
                     </tr>';
 		}
 	}else{
 		$html .='<tr>
-				<td colspan="8" align="center">
+				<td colspan="7" align="center">
 					No data found
 				</td>
 			</tr>';

@@ -2,13 +2,15 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Index extends MY_Controller {
+	
 	public function __construct() {
 		parent::__construct();
 		$this->logo = base_url('public/admin/img/dashboard_logo.png');
 	}
 	public function index()
 	{
-		die('welcome');
+		$this->data['page'] = 'front/index';
+		$this->load_front_view($this->data);
 	}
 
 	/**
@@ -341,7 +343,7 @@ class Index extends MY_Controller {
 			$otp =	rand(1111, 9999);
 			$siteData = $this->common_model->select_row('site_settings', ['id'=> 1], 'site_settings.*');
 			$params['name']         =    $siteData->name?$siteData->name:'Pink Delivery';
-			$params['to']           =    $postData['email']; //'chayan.samanta@met-technologies.com';//
+			$params['to']           =    $postData['email'];
 			$params['subject']      =   'Forgot password OTP';
 			$params['user_name']    =    $postData['email'];
 			$params['from_email']   =	$siteData->email?$siteData->email:'info@pinkdelivery.com';
@@ -577,130 +579,130 @@ class Index extends MY_Controller {
 	 * @request u_id, name, email, phone,pin, city, state
 	 * @address_id for update
 	*/
-	public function addAddress()
-	{
-		$this->isJSON(file_get_contents('php://input'));
-		$postData = $this->extract_json(file_get_contents('php://input'));
-		if (!empty($postData)) {
-			if($postData['u_id'] ==""){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
-			if($postData['name'] ==""){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'Name is required'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
-			if($postData['email'] ==""){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'Email is required'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
-			if($postData['phone'] ==""){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'Phone is required'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
-			$this->auth($postData['u_id']);
-			$this->data = array(
-					'user_id'=> $postData['u_id'],
-					'name'=> $postData['name'],
-					'email'=> $postData['email'],
-					'phone'=> $postData['phone'],
-					'pin'=> $postData['pin'],
-					'city'=> $postData['city'],
-					'state'=> $postData['state'],
-				);
-			if(!isset($postData['address_id']) && empty($postData['address_id'])){
-				if($this->common_model->add('customer_address', $this->data)){
-					$this->response = array('status' => array('error_code' => 0, 'message' => 'Address added successfully'), 'result' => array('data' => $userData));
-				}else{
-					$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to add address'), 'result' => array('data' => $userData));
-				}
-			}else{
-				$this->data['updated_at'] = date('Y-m-d H:i:s');
-				if($this->common_model->update('customer_address', $this->data, ['id'=> $postData['address_id']])){
-					$this->response = array('status' => array('error_code' => 0, 'message' => 'Address updated successfully'), 'result' => array('data' => $userData));
-				}else{
-					$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to update address'), 'result' => array('data' => $userData));
-				}
-			}
-		}
-		else {
-			$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
-		}
+	// public function addAddress()
+	// {
+	// 	$this->isJSON(file_get_contents('php://input'));
+	// 	$postData = $this->extract_json(file_get_contents('php://input'));
+	// 	if (!empty($postData)) {
+	// 		if($postData['u_id'] ==""){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
+	// 		if($postData['name'] ==""){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'Name is required'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
+	// 		if($postData['email'] ==""){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'Email is required'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
+	// 		if($postData['phone'] ==""){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'Phone is required'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
+	// 		$this->auth($postData['u_id']);
+	// 		$this->data = array(
+	// 				'user_id'=> $postData['u_id'],
+	// 				'name'=> $postData['name'],
+	// 				'email'=> $postData['email'],
+	// 				'phone'=> $postData['phone'],
+	// 				'pin'=> $postData['pin'],
+	// 				'city'=> $postData['city'],
+	// 				'state'=> $postData['state'],
+	// 			);
+	// 		if(!isset($postData['address_id']) && empty($postData['address_id'])){
+	// 			if($this->common_model->add('customer_address', $this->data)){
+	// 				$this->response = array('status' => array('error_code' => 0, 'message' => 'Address added successfully'), 'result' => array('data' => $userData));
+	// 			}else{
+	// 				$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to add address'), 'result' => array('data' => $userData));
+	// 			}
+	// 		}else{
+	// 			$this->data['updated_at'] = date('Y-m-d H:i:s');
+	// 			if($this->common_model->update('customer_address', $this->data, ['id'=> $postData['address_id']])){
+	// 				$this->response = array('status' => array('error_code' => 0, 'message' => 'Address updated successfully'), 'result' => array('data' => $userData));
+	// 			}else{
+	// 				$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to update address'), 'result' => array('data' => $userData));
+	// 			}
+	// 		}
+	// 	}
+	// 	else {
+	// 		$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
+	// 	}
 
-		$this->outputJson($this->response);
-	}
+	// 	$this->outputJson($this->response);
+	// }
 	/**
 	 *@address_id for update
 	*/
-	public function deleteAddress()
-	{
-		$this->isJSON(file_get_contents('php://input'));
-		$postData = $this->extract_json(file_get_contents('php://input'));
-		if (!empty($postData)) {
-			if($postData['u_id'] ==""){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
+	// public function deleteAddress()
+	// {
+	// 	$this->isJSON(file_get_contents('php://input'));
+	// 	$postData = $this->extract_json(file_get_contents('php://input'));
+	// 	if (!empty($postData)) {
+	// 		if($postData['u_id'] ==""){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
 			
-			if($postData['address_id'] ==""){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
-			$this->auth($postData['u_id']);
-			$this->data = array(
-					'status'=> 3,
-				);
-			$this->data['updated_at'] = date('Y-m-d H:i:s');
-			if($this->common_model->update('customer_address', $this->data, ['id'=> $postData['address_id']])){
-				$this->response = array('status' => array('error_code' => 0, 'message' => 'Address deleted successfully'), 'result' => array('data' => $userData));
-			}else{
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to deleted address'), 'result' => array('data' => $userData));
-			}
-		}
-		else {
-			$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
-		}
-		$this->outputJson($this->response);
-	}
+	// 		if($postData['address_id'] ==""){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
+	// 		$this->auth($postData['u_id']);
+	// 		$this->data = array(
+	// 				'status'=> 3,
+	// 			);
+	// 		$this->data['updated_at'] = date('Y-m-d H:i:s');
+	// 		if($this->common_model->update('customer_address', $this->data, ['id'=> $postData['address_id']])){
+	// 			$this->response = array('status' => array('error_code' => 0, 'message' => 'Address deleted successfully'), 'result' => array('data' => $userData));
+	// 		}else{
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to deleted address'), 'result' => array('data' => $userData));
+	// 		}
+	// 	}
+	// 	else {
+	// 		$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
+	// 	}
+	// 	$this->outputJson($this->response);
+	// }
 	/**
 	 * @request oldPassword, newPassword, u_id
 	*/
-	public function changePassword()
-	{
-		$this->isJSON(file_get_contents('php://input'));
-		$postData = $this->extract_json(file_get_contents('php://input'));
-		ini_set('display_errors', 1);
-		if (!empty($postData)) {
-			if($postData['u_id'] ==""){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
-			if($postData['oldPassword'] ==""){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'Old password is required'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
-			if($postData['newPassword'] ==""){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'New password is required'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
-			$this->auth($postData['u_id']);
+	// public function changePassword()
+	// {
+	// 	$this->isJSON(file_get_contents('php://input'));
+	// 	$postData = $this->extract_json(file_get_contents('php://input'));
+	// 	ini_set('display_errors', 1);
+	// 	if (!empty($postData)) {
+	// 		if($postData['u_id'] ==""){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
+	// 		if($postData['oldPassword'] ==""){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'Old password is required'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
+	// 		if($postData['newPassword'] ==""){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'New password is required'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
+	// 		$this->auth($postData['u_id']);
 			
-			if(!$this->common_model->select_row('users', ['user_id'=> $postData['u_id'], 'password'=> MD5($postData['oldPassword'])], 'users.user_id')){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'Current password not matched'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
-			if($this->common_model->update('users', ['password' => MD5($postData['newPassword'])], ['user_id' => $postData['u_id']])){
-				$this->response = array('status' => array('error_code' => 0, 'message' => 'Password changed successfully'), 'result' => array('data' => $userData));
-			}else{
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to update password'), 'result' => array('data' => $userData));
-			}
-		}
-		else {
-			$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
-		}
+	// 		if(!$this->common_model->select_row('users', ['user_id'=> $postData['u_id'], 'password'=> MD5($postData['oldPassword'])], 'users.user_id')){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'Current password not matched'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
+	// 		if($this->common_model->update('users', ['password' => MD5($postData['newPassword'])], ['user_id' => $postData['u_id']])){
+	// 			$this->response = array('status' => array('error_code' => 0, 'message' => 'Password changed successfully'), 'result' => array('data' => $userData));
+	// 		}else{
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to update password'), 'result' => array('data' => $userData));
+	// 		}
+	// 	}
+	// 	else {
+	// 		$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
+	// 	}
 
-		$this->outputJson($this->response);
-	}
+	// 	$this->outputJson($this->response);
+	// }
 	/**
 	 * Logout API
 	 */
@@ -716,11 +718,7 @@ class Index extends MY_Controller {
 			if($postData['source'] === 'WEB'){
 				$this->session->unset_userdata('admin_user');					
 			}
-			// else{
-
-			// }
-
-			$this->response = array('status' => array('error_code' => 0, 'message' => 'Logout successfully'), 'result' => array('data' => $userData));
+			$this->response = array('status' => array('error_code' => 0, 'message' => 'Logout successfully'), 'result' => array('data' => array()));
 		}
 		else {
 			$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
@@ -734,180 +732,194 @@ class Index extends MY_Controller {
 	 * Wishlist section
 	 * @request u_id, product_id
 	*/
-	public function addWishlist()
-	{
-		$this->isJSON(file_get_contents('php://input'));
-		$postData = $this->extract_json(file_get_contents('php://input'));
-		if (!empty($postData)) {
-			if($postData['u_id'] ==""){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
-			if($postData['product_id'] ==""){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'Product is required'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
-			$this->auth($postData['u_id']);
-			$this->data = array(
-					'user_id'=> $postData['u_id'],
-					'product_id'=> $postData['product_id']
-				);
-				$isData = $this->common_model->select_row('wishlist_items', $this->data);
-				if(empty($isData)){
-					$isSaved = $this->common_model->add('wishlist_items', $this->data);
-				}else{
-					$isSaved = true;
-				}
-				//if(!isset($postData['address_id']) && empty($postData['address_id'])){
-				if($isSaved){
-					$this->obj = $this->common_model->select('wishlist_items', ['user_id'=> $postData['u_id']], 'wishlist_items.*', 'wishlist_items.id', 'DESC');
-					$this->response = array('status' => array('error_code' => 0, 'message' => 'Add items to wishlist successfully'), 'result' => array('data' => $this->obj));
-				}else{
-					$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to add wishlist'), 'result' => array('data' => $this->obj));
-				}
-		}
-		else {
-			$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
-		}
+	// public function addWishlist()
+	// {
+	// 	$this->isJSON(file_get_contents('php://input'));
+	// 	$postData = $this->extract_json(file_get_contents('php://input'));
+	// 	if (!empty($postData)) {
+	// 		if($postData['u_id'] ==""){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
+	// 		if($postData['product_id'] ==""){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'Product is required'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
+	// 		$this->auth($postData['u_id']);
+	// 		$this->data = array(
+	// 				'user_id'=> $postData['u_id'],
+	// 				'product_id'=> $postData['product_id']
+	// 			);
+	// 			$isData = $this->common_model->select_row('wishlist_items', $this->data);
+	// 			if(empty($isData)){
+	// 				$isSaved = $this->common_model->add('wishlist_items', $this->data);
+	// 			}else{
+	// 				$isSaved = true;
+	// 			}
+	// 			//if(!isset($postData['address_id']) && empty($postData['address_id'])){
+	// 			if($isSaved){
+	// 				$this->obj = $this->common_model->select('wishlist_items', ['user_id'=> $postData['u_id']], 'wishlist_items.*', 'wishlist_items.id', 'DESC');
+	// 				$this->response = array('status' => array('error_code' => 0, 'message' => 'Add items to wishlist successfully'), 'result' => array('data' => $this->obj));
+	// 			}else{
+	// 				$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to add wishlist'), 'result' => array('data' => $this->obj));
+	// 			}
+	// 	}
+	// 	else {
+	// 		$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
+	// 	}
 
-		$this->outputJson($this->response);
-	}
+	// 	$this->outputJson($this->response);
+	// }
 	/**
 	 * @request u_id
 	*/
-	public function getWishlist()
-	{
-		$this->isJSON(file_get_contents('php://input'));
-		$postData = $this->extract_json(file_get_contents('php://input'));
-		if (!empty($postData)) {
-			if($postData['u_id'] ==""){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
-			$this->auth($postData['u_id']);
-			$this->data = array(
-					'user_id'=> $postData['u_id']
-				);
-				$this->join[] = ['table' => 'products p', 'on' => 'p.product_id = wishlist_items.product_id', 'type' => 'left'];
-				$obj = $this->common_model->select('wishlist_items', ['user_id'=> $postData['u_id']], 'wishlist_items.*, p.vendor_id', 'wishlist_items.id', 'DESC', $this->join);
-				ini_set('display_errors', 1);
-				if($obj){
-					$temp_arr = [];
-					foreach($obj as $value){
-						$this->join = array();
-						$select = 'products.*, c.category_name, vd.vendor_name, IF(products.product_image IS NULL, "", CONCAT("'.base_url().'uploads/product/",products.product_image)) as product_image';
-						$this->join[] = ['table' => 'categories c', 'on' => 'c.category_id = products.category_id', 'type' => 'left'];
-						$this->join[] = ['table' => 'vendor_details vd', 'on' => 'vd.vendor_id = products.vendor_id', 'type' => 'left'];
-						$temp = $this->common_model->select('products', ['products.product_id'=> $value->product_id], $select, 'products.product_id', 'DESC', $this->join);
+	// public function getWishlist()
+	// {
+	// 	$this->isJSON(file_get_contents('php://input'));
+	// 	$postData = $this->extract_json(file_get_contents('php://input'));
+	// 	if (!empty($postData)) {
+	// 		if($postData['u_id'] ==""){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
+	// 		$this->auth($postData['u_id']);
+	// 		$this->data = array(
+	// 				'user_id'=> $postData['u_id']
+	// 			);
+	// 			$this->join[] = ['table' => 'products p', 'on' => 'p.product_id = wishlist_items.product_id', 'type' => 'left'];
+	// 			$obj = $this->common_model->select('wishlist_items', ['user_id'=> $postData['u_id']], 'wishlist_items.*, p.vendor_id', 'wishlist_items.id', 'DESC', $this->join);
+	// 			ini_set('display_errors', 1);
+	// 			if($obj){
+	// 				$temp_arr = [];
+	// 				foreach($obj as $value){
+	// 					$this->join = array();
+	// 					$select = 'products.*, c.category_name, vd.vendor_name, IF(products.product_image IS NULL, "", CONCAT("'.base_url().'uploads/product/",products.product_image)) as product_image';
+	// 					$this->join[] = ['table' => 'categories c', 'on' => 'c.category_id = products.category_id', 'type' => 'left'];
+	// 					$this->join[] = ['table' => 'vendor_details vd', 'on' => 'vd.vendor_id = products.vendor_id', 'type' => 'left'];
+	// 					$temp = $this->common_model->select('products', ['products.product_id'=> $value->product_id], $select, 'products.product_id', 'DESC', $this->join);
 			
-						if(array_key_exists($value->vendor_id, $temp_arr)){
-							$temp_arr[$value->vendor_id]['list'][] = $temp[0];
-						}else{
-							$temp_arr[$value->vendor_id]['vendor_id'] = $value->vendor_id;
-							$temp_arr[$value->vendor_id]['vendor_name'] = $temp[0]->vendor_name;
-							$temp_arr[$value->vendor_id]['list'][] = $temp[0];
-						}
+	// 					if(array_key_exists($value->vendor_id, $temp_arr)){
+	// 						$temp_arr[$value->vendor_id]['list'][] = $temp[0];
+	// 					}else{
+	// 						$temp_arr[$value->vendor_id]['vendor_id'] = $value->vendor_id;
+	// 						$temp_arr[$value->vendor_id]['vendor_name'] = $temp[0]->vendor_name;
+	// 						$temp_arr[$value->vendor_id]['list'][] = $temp[0];
+	// 					}
 						
-					}
-					$this->obj = [];
-					if($temp_arr){
-						foreach($temp_arr as $value){
-							$this->obj[] = $value;
-						}
-					}
-					$this->response = array('status' => array('error_code' => 0, 'message' => 'Successfully'), 'result' => array('data' => $this->obj));
-				}else{
-					$this->response = array('status' => array('error_code' => 1, 'message' => 'No data found'), 'result' => array('data' =>$this->obj));
-				}
-			// }else{
-			// 	$this->data['updated_at'] = date('Y-m-d H:i:s');
-			// 	if($this->common_model->update('customer_address', $this->data, ['id'=> $postData['address_id']])){
-			// 		$this->response = array('status' => array('error_code' => 0, 'message' => 'Address updated successfully'), 'result' => array('data' => $userData));
-			// 	}else{
-			// 		$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to update address'), 'result' => array('data' => $userData));
-			// 	}
-			// }
-		}
-		else {
-			$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
-		}
+	// 				}
+	// 				$this->obj = [];
+	// 				if($temp_arr){
+	// 					foreach($temp_arr as $value){
+	// 						$this->obj[] = $value;
+	// 					}
+	// 				}
+	// 				$this->response = array('status' => array('error_code' => 0, 'message' => 'Successfully'), 'result' => array('data' => $this->obj));
+	// 			}else{
+	// 				$this->response = array('status' => array('error_code' => 1, 'message' => 'No data found'), 'result' => array('data' =>$this->obj));
+	// 			}
+	// 		// }else{
+	// 		// 	$this->data['updated_at'] = date('Y-m-d H:i:s');
+	// 		// 	if($this->common_model->update('customer_address', $this->data, ['id'=> $postData['address_id']])){
+	// 		// 		$this->response = array('status' => array('error_code' => 0, 'message' => 'Address updated successfully'), 'result' => array('data' => $userData));
+	// 		// 	}else{
+	// 		// 		$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to update address'), 'result' => array('data' => $userData));
+	// 		// 	}
+	// 		// }
+	// 	}
+	// 	else {
+	// 		$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
+	// 	}
 
-		$this->outputJson($this->response);
-	}
+	// 	$this->outputJson($this->response);
+	// }
 
 	/**
 	 * Wishlist item removesection
 	 * @request u_id, product_id
 	*/
-	public function removeWishlistItem()
-	{
-		$this->isJSON(file_get_contents('php://input'));
-		$postData = $this->extract_json(file_get_contents('php://input'));
-		if (!empty($postData)) {
-			if($postData['u_id'] ==""){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
-			if($postData['product_id'] ==""){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'Product is required'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
-			$this->auth($postData['u_id']);
-			$this->data = array(
-					'user_id'=> $postData['u_id'],
-					'product_id'=> $postData['product_id']
-				);
-				$this->db->where($this->data);
-				$isDeleted = $this->db->delete('wishlist_items');
-				//if(!isset($postData['address_id']) && empty($postData['address_id'])){
-				if($isDeleted){
-					$this->response = array('status' => array('error_code' => 0, 'message' => 'Deleted item from wishlist successfully done'), 'result' => array('data' => $this->obj));
-				}else{
-					$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to Deleted item from wishlist'), 'result' => array('data' => $this->obj));
-				}
-		}
-		else {
-			$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
-		}
+	// public function removeWishlistItem()
+	// {
+	// 	$this->isJSON(file_get_contents('php://input'));
+	// 	$postData = $this->extract_json(file_get_contents('php://input'));
+	// 	if (!empty($postData)) {
+	// 		if($postData['u_id'] ==""){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
+	// 		if($postData['product_id'] ==""){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'Product is required'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
+	// 		$this->auth($postData['u_id']);
+	// 		$this->data = array(
+	// 				'user_id'=> $postData['u_id'],
+	// 				'product_id'=> $postData['product_id']
+	// 			);
+	// 			$this->db->where($this->data);
+	// 			$isDeleted = $this->db->delete('wishlist_items');
+	// 			//if(!isset($postData['address_id']) && empty($postData['address_id'])){
+	// 			if($isDeleted){
+	// 				$this->response = array('status' => array('error_code' => 0, 'message' => 'Deleted item from wishlist successfully done'), 'result' => array('data' => $this->obj));
+	// 			}else{
+	// 				$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to Deleted item from wishlist'), 'result' => array('data' => $this->obj));
+	// 			}
+	// 	}
+	// 	else {
+	// 		$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
+	// 	}
 
-		$this->outputJson($this->response);
-	}
+	// 	$this->outputJson($this->response);
+	// }
 
 		/**
 	 * Search product from category or product
 	 * @request search_key
 	*/
-	public function productSearch()
-	{
-		$this->isJSON(file_get_contents('php://input'));
-		$postData = $this->extract_json(file_get_contents('php://input'));
-		if (!empty($postData)) {
-			if($postData['search_key'] ==""){
-				$this->response = array('status' => array('error_code' => 1, 'message' => 'Search key is required'), 'result' => array('data' => $this->obj));
-				$this->outputJson($this->response);
-			}
-			$this->data = array(
-					'user_id'=> $postData['u_id'],
-					'product_id'=> $postData['product_id']
-				);
-				$isData = $this->common_model->select_row('wishlist_items', $this->data);
-				if(empty($isData)){
-					$isSaved = $this->common_model->add('wishlist_items', $this->data);
-				}else{
-					$isSaved = true;
-				}
-				//if(!isset($postData['address_id']) && empty($postData['address_id'])){
-				if($isSaved){
-					$this->obj = $this->common_model->select('wishlist_items', ['user_id'=> $postData['u_id']], 'wishlist_items.*', 'wishlist_items.id', 'DESC');
-					$this->response = array('status' => array('error_code' => 0, 'message' => 'Add items to wishlist successfully'), 'result' => array('data' => $this->obj));
-				}else{
-					$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to add wishlist'), 'result' => array('data' => $this->obj));
-				}
-		}
-		else {
-			$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
-		}
+	// public function productSearch()
+	// {
+	// 	$this->isJSON(file_get_contents('php://input'));
+	// 	$postData = $this->extract_json(file_get_contents('php://input'));
+	// 	if (!empty($postData)) {
+	// 		if($postData['search_key'] ==""){
+	// 			$this->response = array('status' => array('error_code' => 1, 'message' => 'Search key is required'), 'result' => array('data' => $this->obj));
+	// 			$this->outputJson($this->response);
+	// 		}
+	// 		$this->data = array(
+	// 				'user_id'=> $postData['u_id'],
+	// 				'product_id'=> $postData['product_id']
+	// 			);
+	// 			$isData = $this->common_model->select_row('wishlist_items', $this->data);
+	// 			if(empty($isData)){
+	// 				$isSaved = $this->common_model->add('wishlist_items', $this->data);
+	// 			}else{
+	// 				$isSaved = true;
+	// 			}
+	// 			//if(!isset($postData['address_id']) && empty($postData['address_id'])){
+	// 			if($isSaved){
+	// 				$this->obj = $this->common_model->select('wishlist_items', ['user_id'=> $postData['u_id']], 'wishlist_items.*', 'wishlist_items.id', 'DESC');
+	// 				$this->response = array('status' => array('error_code' => 0, 'message' => 'Add items to wishlist successfully'), 'result' => array('data' => $this->obj));
+	// 			}else{
+	// 				$this->response = array('status' => array('error_code' => 1, 'message' => 'Failed to add wishlist'), 'result' => array('data' => $this->obj));
+	// 			}
+	// 	}
+	// 	else {
+	// 		$this->response = array('status' => array('error_code' => 1, 'message' => 'BAD REQUEST'), 'result' => array('data' => $this->obj));
+	// 	}
 
-		$this->outputJson($this->response);
+	// 	$this->outputJson($this->response);
+	// }
+
+	/**
+	 * Small bugs
+	*/
+	public function xx($table='users', $column='id', $encode = '')
+	{
+		$u = $this->db->get($table)->result();
+		if(!empty($u)){
+			foreach($u as $v)
+			{
+				$this->db->update($table, [$column=> $encode != '' ?base64_encode($v->$column):base64_decode($v->$column)]);
+			}
+		}
 	}
 }

@@ -22,7 +22,7 @@ class Material extends MY_Controller {
 	{
 		$this->checkAdminAuth();
 		if($id != null){
-			$this->data['details'] = $this->common_model->select_row('material_id', ['material_id'=> $id], 'materials.*');
+			$this->data['details'] = $this->common_model->select_row('materials', ['material_id'=> $id], 'materials.*');
 		}
 		$this->data['page'] = 'admin/material/add';
 		$this->load_view($this->data);

@@ -50,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'index';
-$route['404_override'] = '';
+$route['404_override'] = 'error_page';
 $route['translate_uri_dashes'] = FALSE;
 
 
@@ -111,6 +111,13 @@ $route['admin/product/edit/(:any)']        = 'admin/product/add/$1';
 $route['admin/product/save']        = 'admin/product/productSave'; // Save and update perform in a same function
 $route['admin/product/get']        = 'admin/product/get';
 $route['admin/product/csv-upload']        = 'admin/product/csvUpload';
+
+/** Products management */
+$route['admin/cms']            = 'admin/cms';
+$route['admin/cms/add']        = 'admin/cms/add';
+$route['admin/cms/edit/(:any)']        = 'admin/cms/add/$1';
+$route['admin/cms/save']        = 'admin/cms/cmsSave'; // Save and update perform in a same function
+$route['admin/cms/get']        = 'admin/cms/get';
 
 
 /*Common routes*/

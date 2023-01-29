@@ -107,6 +107,11 @@
       <img src="<?=base_url('public/admin/')?>img/nav_icon2.png" alt="nav_icon2"/> <span>Orders</span>
       </a> <div class="ordernumber"><?php echo $total_new; ?></div> 
     </li>
+    <li class="nav-item <?=$this->uri->segment(2)=="cms"?'active':''?>">
+      <a class="nav-link" href="<?=base_url('admin/cms')?>"> 
+      <img src="<?=base_url('public/admin/')?>img/nav_icon5.png" alt="nav_icon2"/> <span>CMS</span>
+      </a>
+    </li>
     <!--    <li class="nav-item active"> <a class="nav-link" href="index.html"> <img src="<?=base_url('public/admin/')?>img/nav_icon5.png" alt="nav_icon5"/> <span>Image Upload</span></a> </li>-->
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -136,7 +141,9 @@
         <h3 class="pageheading">Dashboard</h3>
         <!-- Topbar Navbar -->
         <ul class="navbar-nav ml-auto">
-        <a href="http://10.12.101.235/mantisbt/view_all_bug_page.php" class="logout"><img src="<?=base_url('public/admin/')?>img/logout_img.png" alt="logout_img"/></a>
+        <!-- <a href="http://10.12.101.235/mantisbt/view_all_bug_page.php" class="logout">
+					<img src="<?=base_url('public/admin/')?>img/logout_img.png" alt="logout_img"/>
+				</a> -->
           <!-- Nav Item - Messages -->
          
           <!-- Nav Item - User Information -->

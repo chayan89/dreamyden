@@ -15,7 +15,7 @@ $total_new=$query->num_rows();
                 <div class="row no-gutters align-items-center">
                   <div class="col mr-2">
                     <div class="text-xs font-weight-bold mb-1 dashboxheading">Today’s Orders</div>
-                    <div class="dashboxheading_number"><?php echo $todays_orders['count(order_id)']; ?></div>
+                    <div class="dashboxheading_number">0</div>
                     <!-- <div class="arrow"><!-- <a href=""><img src="<?=base_url('public/admin/')?>img/white_arrow.png" alt="white_arrow"/></a></div> -->
                   </div>
                 </div>
@@ -29,7 +29,7 @@ $total_new=$query->num_rows();
                 <div class="row no-gutters align-items-center">
                   <div class="col mr-2">
                     <div class="text-xs font-weight-bold mb-1 dashboxheading">Tomorrow’s Orders</div>
-                     <div class="dashboxheading_number"><?php echo $tomorrow_orders['count(order_id)']; ?></div>
+                     <div class="dashboxheading_number">0</div>
                     <!-- <div class="arrow"><a href=""><img src="<?=base_url('public/admin/')?>img/white_arrow.png" alt="white_arrow"/></a></div> -->
                   </div>
                 </div>
@@ -43,7 +43,7 @@ $total_new=$query->num_rows();
                 <div class="row no-gutters align-items-center">
                   <div class="col mr-2">
                     <div class="text-xs font-weight-bold mb-1 dashboxheading">Weekly Sale</div>
-                     <div class="dashboxheading_number">$<?php echo number_format($weeklytotalprice['SUM(total_amount)']); ?></div>
+                     <div class="dashboxheading_number">$0</div>
                     <!-- <div class="arrow"><a href=""><img src="<?=base_url('public/admin/')?>img/white_arrow.png" alt="white_arrow"/></a></div> -->
                   </div>
                 </div>
@@ -57,7 +57,7 @@ $total_new=$query->num_rows();
                 <div class="row no-gutters align-items-center">
                   <div class="col mr-2">
                     <div class="text-xs font-weight-bold mb-1 dashboxheading">Monthly Sale</div>
-                     <div class="dashboxheading_number">$<?php echo number_format($monthlytotal['SUM(total_amount)']); ?>k</div>
+                     <div class="dashboxheading_number">$0k</div>
                     <!-- <div class="arrow"><a href=""><img src="<?=base_url('public/admin/')?>img/white_arrow.png" alt="white_arrow"/></a></div> -->
                   </div>
                 </div>
